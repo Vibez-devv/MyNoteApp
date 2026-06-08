@@ -59,7 +59,7 @@
 
   body {
     margin: 0;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     font-family: sans-serif;
     color: white;
 
@@ -76,6 +76,84 @@
   h3 {
     /* color: white; */
     margin-left: 50px;
+  }
+
+
+  /* Tablet */
+  @media screen and (max-width: 768px) {
+    .paper {
+      margin-left: 50px;
+      margin-top: 50px;
+    }
+
+    input {
+      padding: 10px 60px;
+      margin-left: 20px;
+    }
+
+    textarea {
+      padding: 20px 68px;
+      margin-left: 20px;
+    }
+
+    button {
+      padding: 10px 70px;
+      margin-left: 20px;
+    }
+
+    h3 {
+      margin-left: 20px;
+    }
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 576px) {
+    .paper {
+      margin-left: 10px;
+      margin-top: 30px;
+    }
+
+    input {
+      padding: 10px 30px;
+      margin-left: 10px;
+      width: 90%;
+    }
+
+    textarea {
+      padding: 20px 30px;
+      margin-left: 10px;
+      width: 90%;
+    }
+
+    button {
+      padding: 10px 30px;
+      margin-left: 10px;
+      width: 90%;
+    }
+
+    h3 {
+      margin-left: 10px;
+      font-size: 22px;
+    }
+  }
+
+  /* Small Phones */
+  @media screen and (max-width: 375px) {
+    .paper {
+      margin-left: 5px;
+    }
+
+    input,
+    textarea,
+    button {
+      width: 95%;
+      margin-left: 5px;
+    }
+
+    h3 {
+      margin-left: 5px;
+      font-size: 20px;
+    }
   }
 </style>
 
