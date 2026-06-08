@@ -58,16 +58,19 @@
   }
 
   body {
-    /* background: linear-gradient(135deg, #0F172A, #1E293B); */
-    /* background: linear-gradient(135deg, #020617, #0F172A); */
-    /* background: linear-gradient(135deg, #0F172A, #1E3A8A); */
-    background: linear-gradient(135deg,
-        #050b3d 0%,
-        #0d1b7e 20%,
-        #00d4c7 45%,
-        #1fa2ff 60%,
-        #4f46e5 80%,
-        #ff2ea6 100%);
+    margin: 0;
+    min-height: 100vh;
+    font-family: sans-serif;
+    color: white;
+
+    background: linear-gradient(180deg,
+        #020617 0%,
+        #020b2e 25%,
+        #021b4d 50%,
+        #03396c 75%,
+        #005b96 100%);
+
+    overflow-x: hidden;
   }
 
   h3 {
@@ -87,10 +90,13 @@
 
     <input type="text" id="title" placeholder="Note Title............">
     <br>
-    <textarea id="content" placeholder=""></textarea>
+    <textarea id="content" placeholder="Text here.............."></textarea>
     <br>
-    <button onclick="addNote()">Add Note</button>
+    <button id="addBtn">Add Note</button>
   </div>
+
+
+  <!-- <div class="ocean"></div> -->
 
   <div id="notes"></div>
 </body>
@@ -108,9 +114,9 @@
   } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
   // import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
   import {
-  getAuth,
-  signInAnonymously
-} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+    getAuth,
+    signInAnonymously
+  } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -157,7 +163,7 @@
     saveLocal();
     renderNotes();
 
-    await addDoc(collection(db, "notes"),)
+    await addDoc(collection(db, "notes"), note)
   };
 
   async function loadNotes() {
@@ -181,11 +187,11 @@
     localStorage.setItem("notes", JSON.stringify(notes))
   }
 
-  document.getElementById('serach'), addEventListener("input", (e) => {
+  document.getElementById('search'), addEventListener("input", (e) => {
     renderNotes(e.target.value);
   });
 
-  document.getElementById("addNote").addEventListener("click", addNote)
+  document.getElementById("addBtn").addEventListener("click", addNote)
 
   function renderNotes(search = "") {
     const container = document.getElementById('notes');
@@ -201,7 +207,7 @@
         const wordCount = note.content.split(" ").length;
         const charCount = note.content.length;
 
-        const div = document.getElementById('div');
+        const div = document.createElement("div")
 
         div.innerHTML = `
         <h3>${note.title}</h3>
@@ -214,7 +220,7 @@
           </small><br>
         
           <button onclick="editNote(${index})">Edit</button>
-          <button onclick="deleteNote(${index})">Deleted</button>
+          <button onclick="deleteNote(${index})">Delete</button>
           <button onclick="exportNote(${index})">Export</button>
           
         
@@ -260,39 +266,10 @@
 
 
 
-    window.exportNote = function (index) {
-      const note = notes[index];
-
-      const blob = new Blob(
-        [note.title + "\n\n" + note.content],
-        { type: "text/plain" }
-      );
-
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = note.title + ".txt";
-      a.click();
-    };
-
-
-    window.addEventListener("offline", () => {
-      alert("You are offline");
-    });
-
-    window.addEventListener("online", () => {
-      alert("Back online, syncing...");
-      loadNotes();
-    })
 
 
     // window.exportNote = function(index){
     //   const note = notes[index];
-
-
-    //   const blob = new blob(
-    //     [note.title + "\n\n" + note.content],
-    //     {type: "text/plain"}
-    //   );
 
 
 
@@ -300,6 +277,44 @@
     // }
 
   }
+
+
+  window.exportNote = function (index) {
+    const note = notes[index];
+
+    const blob = new Blob(
+      [note.title + "\n\n" + note.content],
+      { type: "text/plain" }
+    );
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = note.title + ".txt";
+    a.click();
+  };
+
+
+  // window.addEventListener("offline", () => {
+  //   alert("You are offline");
+  // });
+
+  // window.addEventListener("online", () => {
+  //   alert("Back online, syncing...");
+  //   loadNotes();
+  // })
+  window.addEventListener("offline", () => {
+    document.body.insertAdjacentHTML("afterbegin",
+      '<div id="offlineMsg" style="background:red;color:white;padding:10px;text-align:center;">You are offline</div>'
+    );
+  });
+
+  window.addEventListener("online", () => {
+    const msg = document.getElementById("offlineMsg");
+    if (msg) msg.remove();
+
+    console.log("Back online");
+    loadNotes();
+  });
 
 </script>
 
